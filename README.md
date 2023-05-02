@@ -3,7 +3,8 @@
 # dc-extension-hierarchy-chooser
 
 > Allows users to browse and add content items from a hierarchy rather than having to find these items in the Content Library
-![Browse hierarcy](https://cdn.media.amplience.net/i/ampproduct/add-existing-node-4?w=1600&fmt=png)
+
+![Browse hierarcy](screenshot.png)
 
 ## How to install
 
@@ -27,21 +28,23 @@ https://hierarchy-chooser.extensions.content.amplience.net/
 _As this is an open source project you're welcome to host your own fork of the project. You can use any standard static hosting service (Netlify, Amplify, Vercel, etc.) if you wish._
 
 #### Permissions
+
 Give the extension the following permissions:
+
 - Read access
 - Allow same origin
 
-
 #### Installation parameters
+
 To use the hierarchy extension you need to include the content item id of the hierarchy node from which the hierarchy can be browsed in the extension params. Note that the nodeId can be overridden in the content type schema.
 
 | Parameter | Default   | Notes                                                  | Required |
 | --------- | --------- | ------------------------------------------------------ | -------- |
 | nodeId    | undefined | The ID of the node to use as the root node of the tree | true     |
-| type      | 'large'   | Display settings options: large, small, chip  | false     |
-
+| type      | 'large'   | Display settings options: large, small, chip           | false    |
 
 #### Example snippet
+
 Optionally, you can add a schema snippet, which will be made available in the Schema editor.
 
 ```json
