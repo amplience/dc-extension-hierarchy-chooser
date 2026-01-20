@@ -14,6 +14,7 @@
   "dependencies": {
     "@mdi/font": "^5.6.55",
     "core-js": "^3.6.5",
+    "dc-delivery-sdk-js": "^1.4.0",
     "dc-extensions-sdk": "^1.2.0",
     "dc-management-sdk-js": "^1.8.0",
     "mobx": "^5.15.7",

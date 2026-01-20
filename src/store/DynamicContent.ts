@@ -1,6 +1,7 @@
 import { isError } from "@/utils/helpers";
 import { SDK, init, Params } from "dc-extensions-sdk";
 import { DynamicContent, ContentItem } from "dc-management-sdk-js";
+import { ContentClient } from "dc-delivery-sdk-js";
 import { action, computed, observable } from "mobx";
 
 import {
@@ -40,6 +41,8 @@ export enum CardType {
 type ExtensionParams = Params & {
   instance: {
     nodeId: string;
+    deliveryKey: string;
+    hubName: string;
     type: CardType;
   };
 };
@@ -88,7 +91,7 @@ export class Store {
     return getSchemaProp(
       "maxItems",
       Number.MAX_SAFE_INTEGER,
-      this.dcExtensionSdk
+      this.dcExtensionSdk,
     );
   }
 
@@ -136,7 +139,7 @@ export class Store {
       pathOr([], ["field", "schema", "items", "allOf"]),
       map(path(["properties", "contentType", "enum"])),
       flatten,
-      reject(isNil)
+      reject(isNil),
       //@ts-ignore
     )(this.dcExtensionSdk);
   }
@@ -145,6 +148,7 @@ export class Store {
     try {
       const dcExtensionSdk = await init<any, ExtensionParams>();
       const dcManagementSdk = new DynamicContent({}, {}, dcExtensionSdk.client);
+
       this.setDynamicContent(dcManagementSdk, dcExtensionSdk);
 
       const [model, node] = await Promise.all([
@@ -162,10 +166,10 @@ export class Store {
 
       this.dcExtensionSdk.frame.startAutoResizer();
       this.dcExtensionSdk.form.onReadOnlyChange((readonly) =>
-        this.setReadOnly(readonly)
+        this.setReadOnly(readonly),
       );
     } catch (error) {
-      this.setError(error);
+      this.setError(error as NodeError);
       console.info("Failed to initialize", error);
     } finally {
       this.setLoading(false);
@@ -180,14 +184,14 @@ export class Store {
         value.map(async (item) => {
           if (item.id) {
             const { label } = await this.dcManagementSdk.contentItems.get(
-              item.id
+              item.id,
             );
 
             item.label = label;
           }
 
           return item;
-        })
+        }),
       );
 
       return this.createModel(withLabel);
@@ -199,7 +203,7 @@ export class Store {
 
   async updateList(model: Array<CardModel>) {
     const updated = model.map(
-      (value, index) => new CardModel(value.contentItem, index, value.path)
+      (value, index) => new CardModel(value.contentItem, index, value.path),
     );
     this.setValue(updated);
 
@@ -213,7 +217,7 @@ export class Store {
   }
 
   async getNode() {
-    const nodeId = this.getNodeId();
+    const nodeId = await this.getNodeId();
 
     return pipe(
       ifElse(
@@ -223,10 +227,10 @@ export class Store {
           //@ts-ignore
           this.dcManagementSdk.contentItems.get,
           andThen(checkNodeForErrors),
-          otherwise(getError)
-        )
+          otherwise(getError),
+        ),
       ),
-      andThen(ifElse(isError, this.setError, identity))
+      andThen(ifElse(isError, this.setError, identity)),
     )(nodeId);
   }
 
@@ -262,7 +266,7 @@ export class Store {
 
   @action.bound setDynamicContent(
     dcManagementSdk: DynamicContent,
-    dcExtensionSdk: DcExtension
+    dcExtensionSdk: DcExtension,
   ) {
     this.dcExtensionSdk = dcExtensionSdk;
     this.dcManagementSdk = dcManagementSdk;
@@ -330,7 +334,18 @@ export class Store {
     return model;
   }
 
-  getNodeId(): string | undefined {
+  async getNodeId() {
+    if (this.params.deliveryKey) {
+      const dcDeliverySdk = new ContentClient({
+        hubName: this.params.hubName || "",
+      });
+
+      const item = await dcDeliverySdk.getContentItemByKey(
+        this.params.deliveryKey,
+      );
+      return item.body._meta.deliveryId;
+    }
+
     return this.params.nodeId;
   }
 
@@ -338,7 +353,7 @@ export class Store {
     return (
       path(
         ["field", "schema", "items", "allOf", 0, "$ref"],
-        this.dcExtensionSdk
+        this.dcExtensionSdk,
       ) || ""
     );
   }
@@ -357,7 +372,7 @@ export class Store {
     ifElse(
       always(shouldAutosize),
       invoker(0, "startAutoResizer"),
-      invoker(0, "stopAutoResizer")
+      invoker(0, "stopAutoResizer"),
     )(this.dcExtensionSdk.frame);
   }
 }
