@@ -337,7 +337,8 @@ export class Store {
   async getNodeId() {
     if (this.params.deliveryKey) {
       const dcDeliverySdk = new ContentClient({
-        hubName: this.params.hubName || "",
+        hubName: this.params.hubName || "dummy",
+        stagingEnvironment: this.dcExtensionSdk.stagingEnvironment,
       });
 
       const item = await dcDeliverySdk.getContentItemByKey(
