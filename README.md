@@ -69,10 +69,13 @@ To use the hierarchy chooser extension you need to add a content link or content
 
 ## Installation parameters
 
-| Parameter | Default   | Notes                                                  | Required |
-| --------- | --------- | ------------------------------------------------------ | -------- |
-| nodeId    | undefined | The ID of the node to use as the root node of the tree | true     |
-| type      | 'large'   | Display settings options: large, small, chip           | false    |
+You can use either a deliveryKey OR a nodeId param for the node. The deliveryKey will take precedence if you include both.
+
+| Parameter   | Default   | Notes                                                            | Required |
+| ----------- | --------- | ---------------------------------------------------------------- | -------- |
+| deliveryKey | undefined | The delivery key of the node to use as the root node of the tree | true     |
+| nodeId      | undefined | The ID of the node to use as the root node of the tree           | true     |
+| type        | 'large'   | Display settings options: large, small, chip                     | false    |
 
 ```json
 {
