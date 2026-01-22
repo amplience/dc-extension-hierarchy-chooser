@@ -145,8 +145,8 @@ describe("DynamicContent.ts", () => {
   });
 
   describe("getNodeId", () => {
-    it("Should get node ID", () => {
-      const id = DynamicContent.getNodeId();
+    it("Should get node ID", async () => {
+      const id = await DynamicContent.getNodeId();
       expect(id).toEqual(DynamicContent.dcExtensionSdk.params.instance.nodeId);
     });
   });
