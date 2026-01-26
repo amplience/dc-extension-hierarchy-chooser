@@ -62,7 +62,7 @@ export default class TreeView extends Mixins(Alert) {
 
   async loadTree() {
     ifElse(notError, this.setTree, () => this.showAlert("Could not load tree"))(
-      await loadTree(DynamicContentStore.getNodeId())
+      await loadTree(await DynamicContentStore.getNodeId()),
     );
   }
 

@@ -17,7 +17,7 @@ describe("DynamicContent.ts", () => {
     });
     it("Should return model if getting value fails", async () => {
       spyOn(DynamicContent.dcExtensionSdk.field, "getValue").and.returnValue(
-        Promise.reject("Error")
+        Promise.reject("Error"),
       );
       spyOn(console, "info");
       await DynamicContent.getValue();
@@ -32,7 +32,7 @@ describe("DynamicContent.ts", () => {
       const card = new CardModel(content, 0);
       await DynamicContent.updateList([card]);
       expect(
-        DynamicContent.dcExtensionSdk.field.setValue
+        DynamicContent.dcExtensionSdk.field.setValue,
       ).toHaveBeenCalledWith([content]);
     });
   });
@@ -43,8 +43,8 @@ describe("DynamicContent.ts", () => {
         Promise.resolve(
           getContentItem({
             hierarchy: { root: true },
-          })
-        )
+          }),
+        ),
       );
       const node = await DynamicContent.getNode();
       expect(node).toHaveProperty("hierarchy.root", true);
@@ -56,7 +56,7 @@ describe("DynamicContent.ts", () => {
     });
     it("Should set CANNOT_BE_FOUND error", async () => {
       spyOn(DynamicContent.dcManagementSdk.contentItems, "get").and.returnValue(
-        Promise.reject("not found")
+        Promise.reject("not found"),
       );
       await DynamicContent.getNode();
       expect(DynamicContent.error).toHaveProperty("type", "CANNOT_BE_FOUND");
@@ -67,8 +67,8 @@ describe("DynamicContent.ts", () => {
           getContentItem({
             status: "ARCHIVED",
             hierarchy: { root: true },
-          })
-        )
+          }),
+        ),
       );
       await DynamicContent.getNode();
       expect(DynamicContent.error).toHaveProperty("type", "ARCHIVED");
@@ -78,15 +78,15 @@ describe("DynamicContent.ts", () => {
         Promise.resolve(
           getContentItem({
             hierarchy: undefined,
-          })
-        )
+          }),
+        ),
       );
       await DynamicContent.getNode();
       expect(DynamicContent.error).toHaveProperty("type", "NOT_HIERARCHY");
     });
     it("Should set NOT_ROOT error", async () => {
       spyOn(DynamicContent.dcManagementSdk.contentItems, "get").and.returnValue(
-        Promise.resolve(getContentItem())
+        Promise.resolve(getContentItem()),
       );
       await DynamicContent.getNode();
       expect(DynamicContent.error).toHaveProperty("type", "NOT_ROOT");
@@ -145,8 +145,8 @@ describe("DynamicContent.ts", () => {
   });
 
   describe("getNodeId", () => {
-    it("Should get node ID", () => {
-      const id = DynamicContent.getNodeId();
+    it("Should get node ID", async () => {
+      const id = await DynamicContent.getNodeId();
       expect(id).toEqual(DynamicContent.dcExtensionSdk.params.instance.nodeId);
     });
   });
@@ -155,7 +155,7 @@ describe("DynamicContent.ts", () => {
     it("Should get item ref", () => {
       const ref = DynamicContent.getItemRef();
       expect(ref).toEqual(
-        DynamicContent.dcExtensionSdk.field.schema.items.allOf[0].$ref
+        DynamicContent.dcExtensionSdk.field.schema.items.allOf[0].$ref,
       );
     });
   });
@@ -187,14 +187,14 @@ describe("DynamicContent.ts", () => {
       spyOn(DynamicContent.dcExtensionSdk.frame, "startAutoResizer");
       DynamicContent.autoSizeComponent(true);
       expect(
-        DynamicContent.dcExtensionSdk.frame.startAutoResizer
+        DynamicContent.dcExtensionSdk.frame.startAutoResizer,
       ).toHaveBeenCalled();
     });
     it("Should stop autosizer", () => {
       spyOn(DynamicContent.dcExtensionSdk.frame, "stopAutoResizer");
       DynamicContent.autoSizeComponent(false);
       expect(
-        DynamicContent.dcExtensionSdk.frame.stopAutoResizer
+        DynamicContent.dcExtensionSdk.frame.stopAutoResizer,
       ).toHaveBeenCalled();
     });
   });

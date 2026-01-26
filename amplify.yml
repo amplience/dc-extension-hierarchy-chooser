@@ -5,7 +5,7 @@ frontend:
       commands:
         - nvm install 16
         - nvm use 16
-        - npm ci
+        - npm ci --ignore-scripts
         - npm test
     build:
       commands:
