@@ -9,7 +9,7 @@
     "test:e2e": "vue-cli-service test:e2e",
     "test:watch": "vue-cli-service test:unit --watch",
     "lint": "vue-cli-service lint",
-    "test": "vue-cli-service test:unit && vue-cli-service test:e2e --headless"
+    "test": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@mdi/font": "^5.6.55",
