@@ -16,7 +16,7 @@
     "core-js": "^3.6.5",
     "dc-delivery-sdk-js": "^1.4.0",
     "dc-extensions-sdk": "^1.2.0",
-    "dc-management-sdk-js": "^1.8.0",
+    "dc-management-sdk-js": "^1.17.2",
     "mobx": "^5.15.7",
     "mobx-state-tree": "^3.17.2",
     "mobx-vue": "^2.0.11",
